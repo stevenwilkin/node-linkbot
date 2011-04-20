@@ -1,0 +1,8 @@
+DROP TABLE IF EXISTS links;
+
+CREATE TABLE links (
+	id INTEGER PRIMARY KEY,
+	link TEXT,
+	author TEXT,
+	date DATETIME
+);
