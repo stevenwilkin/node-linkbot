@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 
-var irc = require('irc');
+var
+	irc = require('irc'),
+	sqlite = require('sqlite');
 
 const
 	SERVER = 'irc.freenode.net',
@@ -8,6 +10,7 @@ const
 	NICK = 'biscuitbot';
 
 var start = new Date();
+var db = new sqlite.Database();
 
 
 bot = {
@@ -56,10 +59,37 @@ bot = {
 		var matches = message.match(/(https?\:\/\/[^ ]+)/);
 		if(matches) {
 			console.log('> link mentioned');
-			bot.client.say(CHANNEL, matches[1]);
+			bot.addLink(matches[1], from);
 		}
+	},
+
+
+	/**
+	 * Add a link to the database
+	 *
+	 * @param link   string Link URL
+	 * @param author string Nick originating the link
+	 */
+	addLink: function(link, author) {
+		db.execute(
+			'INSERT INTO links (link, author, date) VALUES (?, ?, DATETIME());',
+			[link, author],
+			function(error, rows) {
+				if(error) {
+					console.log('> error adding link');
+				} else {
+					console.log('> link added');
+				}
+			}
+		);
 	}
 }
 
 
-bot.init();
+db.open('./db/links.db', function(error) {
+	if(error) {
+		console.log('> error initialising database');
+	} else {
+		bot.init();
+	}
+});
