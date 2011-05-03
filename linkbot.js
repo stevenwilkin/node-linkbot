@@ -53,6 +53,10 @@ bot = {
 				var uptime = new Date - start;
 				bot.client.say(CHANNEL, uptime + 's');
 			}
+			if(command.match(/links/i)) {
+				bot.displayLinks(3);
+				return;
+			}
 			return;
 		}
 	
@@ -60,6 +64,7 @@ bot = {
 		if(matches) {
 			console.log('> link mentioned');
 			bot.addLink(matches[1], from);
+			return;
 		}
 	},
 
@@ -79,6 +84,30 @@ bot = {
 					console.log('> error adding link');
 				} else {
 					console.log('> link added');
+				}
+			}
+		);
+	},
+
+
+	/**
+	 * Display the previous 'n' mentioned links
+	 *
+	 * @param n integer Number of links to display
+	 */
+	displayLinks: function(n) {
+		console.log('> retrieving %d links', n);
+		db.execute(
+			'SELECT link FROM links ORDER BY date DESC LIMIT ?;',
+			[n],
+			function(error, rows) {
+				if(error) {
+					console.log('> db select failed');
+					return;
+				}
+				for(i in rows) {
+					var link = '[' + i + '] ' + rows[i].link;
+					bot.client.say(CHANNEL, link);
 				}
 			}
 		);
