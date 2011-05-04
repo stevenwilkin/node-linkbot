@@ -9,7 +9,7 @@ var start = new Date();
 var db = new sqlite.Database();
 
 
-bot = {
+var bot = {
 
 	client: null,
 
