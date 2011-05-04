@@ -16,6 +16,11 @@ A simple IRC bot developed with Node. Joins a specified room and logs mentioned 
 
 	./bin/create_database.sh
 
+### Configure
+
+Copy `config.js-dist` to `config.js` and set the server, channel and nick you want
+the bot to use
+
 ### Launch the bot
 
 	./linkbot.js

@@ -2,12 +2,8 @@
 
 var
 	irc = require('irc'),
-	sqlite = require('sqlite');
-
-const
-	SERVER = 'irc.freenode.net',
-	CHANNEL = '#biscuitbot',
-	NICK = 'biscuitbot';
+	sqlite = require('sqlite'),
+	config = require('./config.js');
 
 var start = new Date();
 var db = new sqlite.Database();
@@ -25,8 +21,8 @@ bot = {
 
 		console.log('> starting bot');
 
-		var client = bot.client = new irc.Client(SERVER, NICK, {
-			channels: [CHANNEL]
+		var client = bot.client = new irc.Client(config.server, config.nick, {
+			channels: [config.channel]
 		});
 		
 		client.on('join', function() {
@@ -34,7 +30,7 @@ bot = {
 		});
 		
 		
-		client.on('message' + CHANNEL, bot.message);
+		client.on('message' + config.channel, bot.message);
 	},
 
 
@@ -51,7 +47,7 @@ bot = {
 			console.log('> command: %s', command);
 			if(command.match(/uptime/i)) {
 				var uptime = new Date - start;
-				bot.client.say(CHANNEL, uptime + 's');
+				bot.client.say(config.channel, uptime + 's');
 			}
 			if(command.match(/links/i)) {
 				bot.displayLinks(3);
@@ -107,7 +103,7 @@ bot = {
 				}
 				for(i in rows) {
 					var link = '[' + i + '] ' + rows[i].link;
-					bot.client.say(CHANNEL, link);
+					bot.client.say(config.channel, link);
 				}
 			}
 		);

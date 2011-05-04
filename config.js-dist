@@ -1,0 +1,7 @@
+var config = {
+	server:  'irc.freenode.net',
+	channel: '',
+	nick:    'linkbot'
+};
+
+module.exports = config;
